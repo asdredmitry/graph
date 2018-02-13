@@ -554,7 +554,7 @@ WFillRectangle (int x_top_left, int y_top_left,
 void
 WFillTriangle (int x_1, int y_1, int x_2, int y_2, int x_3, int y_3)
 {
-  XPoint points[3] = { {x_1, y_1}, {x_2, y_2}, {x_3, y_3} };
+  XPoint points[3] = { {(short int)x_1, (short int)y_1}, {(short int)x_2, (short int)y_2}, {(short int)x_3, (short int)y_3} };
   XFillPolygon (prDisplay, draw, prGC, points, 3, Convex, CoordModeOrigin);
 }
 

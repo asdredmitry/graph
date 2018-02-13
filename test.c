@@ -8,7 +8,7 @@ static int variant = 0;
 /* Нарисовать содержимое окна */
  double func(double x)
 {
-  return x*x;
+  return log(x);
 }
 static void
 DrawWindowContent (void)
@@ -24,8 +24,8 @@ DrawWindowContent (void)
   WDrawLine (width / 2, 0, width / 2, height);
 
   WDrawString ("Press Q to quit, F1...F4 to change function", 10, 20);
-  int begin = -1;
-  int end = 1;
+  int begin = 1;
+  int end = 109;
   double up,down;
   up = func(begin);
   down = up;

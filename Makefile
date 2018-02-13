@@ -1,7 +1,7 @@
 NAME            = plot
 
-CC              = gcc
-LINK            = gcc
+CC              = g++
+LINK            = g++
 
 DEBUG           = 
 OPTIMAZE_COMMON   = -O3 -ffast-math
