@@ -1,10 +1,15 @@
 #include <stdio.h>
 #include "plot_x11.h"
+#include <math.h>
 
 /* Вариант рисуемого графика */
 static int variant = 0;
 
 /* Нарисовать содержимое окна */
+ double func(double x)
+{
+  return x*x;
+}
 static void
 DrawWindowContent (void)
 {
@@ -19,8 +24,46 @@ DrawWindowContent (void)
   WDrawLine (width / 2, 0, width / 2, height);
 
   WDrawString ("Press Q to quit, F1...F4 to change function", 10, 20);
-
-  switch (variant)
+  int begin = -1;
+  int end = 1;
+  double up,down;
+  up = func(begin);
+  down = up;
+  for(double i = begin; i < end; i+= 0.1)
+  {
+    if(up < func(i))
+      up = func(i);
+    if(down > func(i))
+      down = func(i);
+  }
+  printf("%f up ",up);
+  printf("%f down ",down);
+  double abswidth = end - begin;
+  double absheight = (down < 0) ? up - down : 2*up;
+  double aspectRatio = absheight/abswidth;
+  double windowAspectRatio = (double)height/(double)width;
+  printf("%f ",aspectRatio);
+  printf("%f \n",windowAspectRatio);
+  WSetColor (BLUE);
+  if(aspectRatio <= windowAspectRatio)
+  {
+  double ratio = ((double)width)/abswidth;
+  printf(" ratio %f ",ratio);
+    for(double i = begin; i < end; i += 0.1)
+    {
+       WDrawLine ((i + 0.1)*ratio + width/2, -func(i + 0.1)*ratio + height/2, (i)*ratio + width/2, -func(i)*ratio + height/2);
+    }  
+  }
+  else
+  {
+    double ratio = (double)height/absheight;
+    for(double i = begin; i < end; i += 0.1)
+    { 
+       WDrawLine (i*ratio + width/2, -func(i)*ratio + height/2, (i+0.1)*ratio + width/2, -func(i+0.1)*ratio + height/2);
+    }  
+  }
+  
+  /*switch (variant)
   {
   case 1:
     WSetColor (BLUE);
@@ -63,6 +106,7 @@ DrawWindowContent (void)
     }
     break;
   }
+  */
 }
 
 static int 
