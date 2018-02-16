@@ -8,11 +8,12 @@ static int variant = 0;
 /* Нарисовать содержимое окна */
  double func(double x)
 {
-  return log(x);
+  return 10*sin(x);
 }
 static void
 DrawWindowContent (void)
 {
+  double c = 2;
   int width = nWWidth;		/* Текущая ширина экрана */
   int height = nWHeight;	/* Текущая высота экрана */
 
@@ -24,8 +25,8 @@ DrawWindowContent (void)
   WDrawLine (width / 2, 0, width / 2, height);
 
   WDrawString ("Press Q to quit, F1...F4 to change function", 10, 20);
-  int begin = 1;
-  int end = 109;
+  int begin = -10;
+  int end = 10;
   double up,down;
   up = func(begin);
   down = up;
@@ -33,6 +34,10 @@ DrawWindowContent (void)
   {
     if(up < func(i))
       up = func(i);
+    if(up < func(c*i))
+        up = func(i);
+    if(down > func(c*i))
+        down = func(c*i);
     if(down > func(i))
       down = func(i);
   }
@@ -51,7 +56,10 @@ DrawWindowContent (void)
   printf(" ratio %f ",ratio);
     for(double i = begin; i < end; i += 0.1)
     {
-       WDrawLine ((i + 0.1)*ratio + width/2, -func(i + 0.1)*ratio + height/2, (i)*ratio + width/2, -func(i)*ratio + height/2);
+         WSetColor (BLUE);
+        WDrawLine ((i + 0.1)*ratio + width/2, -func(i + 0.1)*ratio + height/2, (i)*ratio + width/2, -func(i)*ratio + height/2);
+        WSetColor(RED);
+       WDrawLine ((i + 0.1)*ratio + width/2, -func(c*(i + 0.1))*ratio + height/2, (i)*ratio + width/2, -func(c*i)*ratio + height/2);
     }  
   }
   else
@@ -59,7 +67,10 @@ DrawWindowContent (void)
     double ratio = (double)height/absheight;
     for(double i = begin; i < end; i += 0.1)
     { 
+         WSetColor (BLUE);
        WDrawLine (i*ratio + width/2, -func(i)*ratio + height/2, (i+0.1)*ratio + width/2, -func(i+0.1)*ratio + height/2);
+       WSetColor(RED);
+        WDrawLine (i*ratio + width/2, -func(c*i)*ratio + height/2, (i+0.1)*ratio + width/2, -func(c*(i+0.1))*ratio + height/2);
     }  
   }
   
