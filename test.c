@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "plot_x11.h"
 #include <math.h>
-
+double begin(-10),end(10),c(2);
+double accuracy(0.001);
 /* Вариант рисуемого графика */
 static int variant = 0;
 
@@ -13,7 +14,6 @@ static int variant = 0;
 static void
 DrawWindowContent (void)
 {
-  double c = 2;
   int width = nWWidth;		/* Текущая ширина экрана */
   int height = nWHeight;	/* Текущая высота экрана */
 
@@ -24,13 +24,10 @@ DrawWindowContent (void)
   WDrawLine (0, height / 2, width, height / 2);
   WDrawLine (width / 2, 0, width / 2, height);
 
-  WDrawString ("Press Q to quit, F1...F4 to change function", 10, 20);
-  int begin = -10;
-  int end = 10;
   double up,down;
   up = func(begin);
   down = up;
-  for(double i = begin; i < end; i+= 0.1)
+  for(double i = begin; i < end; i+= accuracy)
   {
     if(up < func(i))
       up = func(i);
@@ -41,83 +38,33 @@ DrawWindowContent (void)
     if(down > func(i))
       down = func(i);
   }
-  printf("%f up ",up);
-  printf("%f down ",down);
   double abswidth = end - begin;
   double absheight = (down < 0) ? up - down : 2*up;
   double aspectRatio = absheight/abswidth;
   double windowAspectRatio = (double)height/(double)width;
-  printf("%f ",aspectRatio);
-  printf("%f \n",windowAspectRatio);
   WSetColor (BLUE);
   if(aspectRatio <= windowAspectRatio)
   {
   double ratio = ((double)width)/abswidth;
-  printf(" ratio %f ",ratio);
-    for(double i = begin; i < end; i += 0.1)
+    for(double i = begin; i < end; i += accuracy)
     {
-         WSetColor (BLUE);
-        WDrawLine ((i + 0.1)*ratio + width/2, -func(i + 0.1)*ratio + height/2, (i)*ratio + width/2, -func(i)*ratio + height/2);
+        WSetColor (BLUE);
+        WDrawLine ((i + accuracy)*ratio + width/2, -func(i + accuracy)*ratio + height/2, (i)*ratio + width/2, -func(i)*ratio + height/2);
         WSetColor(RED);
-       WDrawLine ((i + 0.1)*ratio + width/2, -func(c*(i + 0.1))*ratio + height/2, (i)*ratio + width/2, -func(c*i)*ratio + height/2);
+        WDrawLine ((i + accuracy)*ratio + width/2, -func(c*(i + accuracy))*ratio + height/2, (i)*ratio + width/2, -func(c*i)*ratio + height/2);
     }  
   }
   else
   {
     double ratio = (double)height/absheight;
-    for(double i = begin; i < end; i += 0.1)
+    for(double i = begin; i < end; i += accuracy)
     { 
-         WSetColor (BLUE);
-       WDrawLine (i*ratio + width/2, -func(i)*ratio + height/2, (i+0.1)*ratio + width/2, -func(i+0.1)*ratio + height/2);
-       WSetColor(RED);
-        WDrawLine (i*ratio + width/2, -func(c*i)*ratio + height/2, (i+0.1)*ratio + width/2, -func(c*(i+0.1))*ratio + height/2);
+        WSetColor (BLUE);
+        WDrawLine (i*ratio + width/2, -func(i)*ratio + height/2, (i+accuracy)*ratio + width/2, -func(i + accuracy)*ratio + height/2);
+        WSetColor(RED);
+        WDrawLine (i*ratio + width/2, -func(c*i)*ratio + height/2, (i+accuracy)*ratio + width/2, -func(c*(i+accuracy))*ratio + height/2);
     }  
   }
-  
-  /*switch (variant)
-  {
-  case 1:
-    WSetColor (BLUE);
-    WDrawLine (0, height, width, 0);
-    break;
-  case 2:
-    WSetColor (GREEN);
-    WDrawLine (0, 0, width, height);
-    break;
-  case 3:
-    WSetColor (BLUE);
-    {
-      int i;
-      double x_start, y_start, x_end, y_end;
-
-      for (i = 1; i < width; i++)
-	{
-	  x_start = i - 1;
-	  y_start = (x_start - width / 2) * (x_start  - width / 2) / (width / 2 * width / 2) * height;
-	  x_end = i;
-	  y_end = (x_end  - width / 2) * (x_end  - width / 2) / (width / 2 * width / 2) * height;
-	  WDrawLine (x_start, y_start, x_end, y_end);
-	}
-    }
-    break;
-  case 4:
-    WSetColor (GREEN);
-    {
-      int i;
-      double x_start, y_start, x_end, y_end;
-
-      for (i = 1; i < width; i++)
-	{
-	  x_start = i - 1;
-	  y_start = (1. - (x_start - width / 2) * (x_start  - width / 2) / (width / 2 * width / 2)) * height;
-	  x_end = i;
-	  y_end = (1. - (x_end	- width / 2) * (x_end  - width / 2) / (width / 2 * width / 2)) * height;
-	  WDrawLine (x_start, y_start, x_end, y_end);
-	}
-    }
-    break;
-  }
-  */
 }
 
 static int 
@@ -164,6 +111,15 @@ main (void)
   int ret_code;
 
   /* Вывод на экран X11. */
+  printf("Enter begin, end, c: \n");
+  if(scanf("%lf %lf %lf",&begin, &end, &c) != 3)
+  {
+      printf("Error");
+      return 0;
+  }
+  printf("%lf\n",(end - begin)/accuracy);
+  if((end - begin)/accuracy > 1000000)
+      accuracy = (end - begin)/1000000;
   ret_code = DrawWindow (DrawWindowContent, KeyPressFunction);
   if (ret_code)
     {
