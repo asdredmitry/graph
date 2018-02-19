@@ -64,9 +64,9 @@ DrawWindowContent (void)
     }
     //addx = 0;
     //add = 0;
-    if(begin*end < 0)
+    //if(begin*end < 0)
         WDrawLine(-begin*ratio + addx,0 ,-begin*ratio + addx,(((up - down)*ratio < height) ? height : (up - down)*ratio) + add);
-    if(up*down < 0)
+    //if(up*down < 0)
         WDrawLine(0,up*ratio + add ,(((end - begin)*ratio < width) ? width  :(end - begin)*ratio) + addx ,up*ratio + add);
     for(double i = begin; i < end; i += accuracy)
     {
