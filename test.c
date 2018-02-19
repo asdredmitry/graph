@@ -10,23 +10,19 @@ static int variant = 0;
 double func(double);
  double func(double x)
 {
-  return 2*sin(x);
+  return sin(x);
 }
 static void
 DrawWindowContent (void)
 {
   double up,down;
   double abswidth,absheight,aspectRatio,windowAspectRatio;
+    double ratio;
   int width = nWWidth;		/* Текущая ширина экрана */
   int height = nWHeight;	/* Текущая высота экрана */
 
   WSetColor (DARKGRAY);
   WFillRectangle (0, 0, width, height);
-
-  WSetColor (BLACK);
-  WDrawLine (0, height / 2, width, height / 2);
-  WDrawLine (width / 2, 0, width / 2, height);
-
   //double up,down;
   up = func(begin);
   down = up;
@@ -37,7 +33,7 @@ DrawWindowContent (void)
     if(up < func(c*i))
         up = func(i);
     if(down > func(c*i))
-        down = func(c*i);
+        down = func(c*i);(end - begin)*ratio;
     if(down > func(i))
       down = func(i);
   }
@@ -47,27 +43,21 @@ DrawWindowContent (void)
   windowAspectRatio = (double)height/(double)width;
   WSetColor (BLUE);
   if(aspectRatio <= windowAspectRatio)
-  {
-  double ratio = ((double)width)/abswidth;
-    for(double i = begin; i < end; i += accuracy)
-    {
-        WSetColor (BLUE);
-        WDrawLine ((i + accuracy)*ratio + width/2, -func(i + accuracy)*ratio + height/2, (i)*ratio + width/2, -func(i)*ratio + height/2);
-        WSetColor(RED);
-        WDrawLine ((i + accuracy)*ratio + width/2, -func(c*(i + accuracy))*ratio + height/2, (i)*ratio + width/2, -func(c*i)*ratio + height/2);
-    }  
-  }
+    ratio = ((double)width)/abswidth;
   else
+    ratio = (double)height/absheight;
+  printf("%lf %lf",up,down);
+  WDrawLine(-begin*ratio,0,-begin*ratio,((up - down)*ratio < height) ? height : (up - down)*ratio);
+  WDrawLine(0,up*ratio,((end - begin)*ratio < width) ? width  :(end - begin)*ratio ,up*ratio);
+  for(double i = begin; i < end; i += accuracy)
   {
-    double ratio = (double)height/absheight;
-    for(double i = begin; i < end; i += accuracy)
-    { 
-        WSetColor (BLUE);
-        WDrawLine (i*ratio + width/2, -func(i)*ratio + height/2, (i+accuracy)*ratio + width/2, -func(i + accuracy)*ratio + height/2);
-        WSetColor(RED);
-        WDrawLine (i*ratio + width/2, -func(c*i)*ratio + height/2, (i+accuracy)*ratio + width/2, -func(c*(i+accuracy))*ratio + height/2);
-    }  
-  }
+    WSetColor (BLUE);
+    printf("%lf " ,i);
+    WDrawLine ((i - begin + accuracy)*ratio, fabs(func(i + accuracy) - up)*ratio, (i - begin)*ratio , fabs(func(i) - up)*ratio);
+        //WSetColor(RED);
+        //WDrawLine ((i - begin + accuracy)*ratio, fabs(func(c*(i + accuracy)) - up)*ratio , (i - begin)*ratio, (func(c*i) - up)*ratio);
+    } 
+    
 }
 
 static int 
