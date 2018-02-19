@@ -10,7 +10,7 @@ static int variant = 0;
 double func(double);
  double func(double x)
 {
-  return sin(x) ;
+  return 2*sin(x) - 1.9;
 }
 static void
 DrawWindowContent (void)
@@ -45,11 +45,8 @@ DrawWindowContent (void)
     if(up < 0)
     {
         printf("%lf fuck %lf  \n",i,up);   
-        return 0;
     }
   }
-  up = 1;
-  down = -1;
   printf("%lf up  %lf down \n",up,down);
   abswidth = end - begin;
   absheight = (down < 0) ? up - down : up;
