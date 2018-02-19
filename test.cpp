@@ -1,22 +1,19 @@
 #include <stdio.h>
 #include "plot_x11.h"
 #include <math.h>
-double begin,end,c;
-double accuracy;
+double begin(-10),end(10),c(2);
+double accuracy(0.001);
 /* Вариант рисуемого графика */
 static int variant = 0;
 
 /* Нарисовать содержимое окна */
-double func(double);
  double func(double x)
 {
-  return 2*sin(x);
+  return 10*sin(x);
 }
 static void
 DrawWindowContent (void)
 {
-  double up,down;
-  double abswidth,absheight,aspectRatio,windowAspectRatio;
   int width = nWWidth;		/* Текущая ширина экрана */
   int height = nWHeight;	/* Текущая высота экрана */
 
@@ -27,7 +24,7 @@ DrawWindowContent (void)
   WDrawLine (0, height / 2, width, height / 2);
   WDrawLine (width / 2, 0, width / 2, height);
 
-  //double up,down;
+  double up,down;
   up = func(begin);
   down = up;
   for(double i = begin; i < end; i+= accuracy)
@@ -41,10 +38,10 @@ DrawWindowContent (void)
     if(down > func(i))
       down = func(i);
   }
-  abswidth = end - begin;
-  absheight = (down < 0) ? up - down : 2*up;
-  aspectRatio = absheight/abswidth;
-  windowAspectRatio = (double)height/(double)width;
+  double abswidth = end - begin;
+  double absheight = (down < 0) ? up - down : 2*up;
+  double aspectRatio = absheight/abswidth;
+  double windowAspectRatio = (double)height/(double)width;
   WSetColor (BLUE);
   if(aspectRatio <= windowAspectRatio)
   {
@@ -112,7 +109,8 @@ int
 main (void)
 {
   int ret_code;
-    accuracy = 0.001;  /* Вывод на экран X11. */
+
+  /* Вывод на экран X11. */
   printf("Enter begin, end, c: \n");
   if(scanf("%lf %lf %lf",&begin, &end, &c) != 3)
   {
