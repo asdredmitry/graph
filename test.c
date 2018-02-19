@@ -10,7 +10,7 @@ static int variant = 0;
 double func(double);
  double func(double x)
 {
-  return 2*sin(x) - 1.9;
+  return 2*sin(x) - 1.4;
 }
 static void
 DrawWindowContent (void)
@@ -67,11 +67,11 @@ DrawWindowContent (void)
     addx = width - abswidth*ratio;
     addx /= 2;
   }
-  addx = 0;
-  add = 0;
+  //addx = 0;
+  //add = 0;
   printf("%lf up  %lf add \n",up,add);
   if(begin*end < 0)
-    WDrawLine(-begin*ratio,0 ,-begin*ratio,(((up - down)*ratio < height) ? height : (up - down)*ratio) + add);
+    WDrawLine(-begin*ratio + addx,0 ,-begin*ratio + addx,(((up - down)*ratio < height) ? height : (up - down)*ratio) + add);
   if(up*down < 0)
     WDrawLine(0,up*ratio + add ,(((end - begin)*ratio < width) ? width  :(end - begin)*ratio) + addx ,up*ratio + add);
   for(double i = begin; i < end; i += accuracy)
