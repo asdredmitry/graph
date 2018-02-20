@@ -10,7 +10,7 @@ static int variant = 0;
 double func(double);
 double func(double x)
 {
-    return 2*sin(x) + 2.4;
+    return fabs(x);
 }
 static void
 DrawWindowContent (void)
